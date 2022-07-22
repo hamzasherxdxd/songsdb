@@ -1,5 +1,4 @@
 import React from 'react'
-import logo from './logo.svg'
 import './App.css'
 import NavScrollExample from './components/nav'
 import ResultAlbum from './components/ResultAlbum'
