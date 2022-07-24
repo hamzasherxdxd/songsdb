@@ -1,24 +1,38 @@
-import React from 'react'
-import Card from 'react-bootstrap/Card'
-import Col from 'react-bootstrap/Col'
-import LinesEllipsis from 'react-lines-ellipsis'
-import Row from 'react-bootstrap/Row'
+import React from 'react';
+import Card from 'react-bootstrap/Card';
+import Col from 'react-bootstrap/Col';
+import LinesEllipsis from 'react-lines-ellipsis';
+import Row from 'react-bootstrap/Row';
 
 export default class ResultAlbum extends React.Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             name: this.props.name,
+            id: [],
             album: [],
             description: [],
             label: [],
             thumbnail: [],
             genre: [],
             artist: [],
-        }
+            showModal: false,
+            modalId: '',
+        };
+        this.handleAlbumClickClose = this.handleAlbumClickClose.bind(this);
+        this.handleAlbumClickOpen = this.handleAlbumClickOpen.bind(this);
+    }
+    handleAlbumClickOpen(id) {
+        // console.log(id)
+        this.props.handleChangeId(id);
+        this.setState({ showModal: true, modalId: id });
     }
 
-    fetchApi(url) {
+    handleAlbumClickClose() {
+        this.setState({ showModal: false });
+    }
+
+    fetchApiAlbum(url) {
         fetch(url, {
             method: 'GET',
             withCredentials: true,
@@ -34,6 +48,7 @@ export default class ResultAlbum extends React.Component {
                     if (data.album.length !== 0) {
                         for (let i = 0; i < data.album.length; i++) {
                             this.setState((prevState) => ({
+                                id: [...prevState.id, data.album[i]['idAlbum']],
                                 album: [
                                     ...prevState.album,
                                     // ...this.state.album,
@@ -59,48 +74,40 @@ export default class ResultAlbum extends React.Component {
                                     ...prevState.genre,
                                     data.album[i]['strGenre'],
                                 ],
-                            }))
+                            }));
                         }
                     }
                 }
-            })
+            });
     }
-
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.name !== this.props.name) {
-            this.fetchApi(
+            this.fetchApiAlbum(
                 `https://theaudiodb.p.rapidapi.com/searchalbum.php?s=${this.props.name}`
-            )
+            );
             this.setState({
+                id: [],
                 album: [],
                 description: [],
                 label: [],
                 thumbnail: [],
                 genre: [],
                 artist: [],
-            })
+            });
         }
     }
+
     render() {
+        // console.log(this.state.id)
         return (
             <div className="cont">
-                {/* <div>
-                    <img src={albumThumb} />
-                    <h1>{album}</h1>
-                    <p>{description}</p>
-                    <div>
-                        <span>{genre}</span>
-                        <span>{label}</span>
-                    </div>
-                </div> */}
-                <p>Search Results for <strong>"{this.props.name}"</strong></p>
                 <Row xs={1} md={6} className="g-4">
                     {this.state.album &&
                         this.state.album.map((item, i) => {
                             return (
                                 <Col>
+                                    <p>{this.state.id[i]}</p>
                                     <Card>
-                                        
                                         <Card.Img
                                             variant="top"
                                             src={this.state.thumbnail[i]}
@@ -120,28 +127,40 @@ export default class ResultAlbum extends React.Component {
                                                     basedOn="letters"
                                                 />
                                             </Card.Text>
-                                            <Card.Title>{this.state.genre[i]}</Card.Title>
+                                            <Card.Title>
+                                                {this.state.genre[i]}
+                                            </Card.Title>
+                                            <button
+                                                onClick={(event) =>
+                                                    this.handleAlbumClickOpen(
+                                                        this.state.id[i]
+                                                    )
+                                                }
+                                            >
+                                                Click
+                                            </button>
+                                            {/* <Modal
+                                                isOpen={this.state.showModal}
+                                                contentLabel="Songs"
+                                                className="Modal"
+                                                overlayClassName="Overlay"
+                                                ariaHideApp={false}
+                                                onRequestClose={
+                                                    this.handleAlbumClickClose
+                                                }
+                                            >
+                                                <ResultSongs
+                                                    id={this.state.modalId}
+                                                />
+                                                <button onClick={this.handleAlbumClickClose}>Close</button>
+                                            </Modal> */}
                                         </Card.Body>
                                     </Card>
                                 </Col>
-                                // <li key={i}>
-                                //     <img
-                                //         src={this.state.thumbnail[i]}
-                                //         width="15%"
-                                //     />
-                                //     {item}
-                                // </li>
-                            )
+                            );
                         })}
                 </Row>
-                {/* <ul>
-                            {this.state.thumbnail && this.state.thumbnail.map(function (item, i) {
-                                return <li key={i}>
-                                    <img src={item} width="30%" />
-                                </li>
-                            })}
-                            </ul> */}
             </div>
-        )
+        );
     }
 }
