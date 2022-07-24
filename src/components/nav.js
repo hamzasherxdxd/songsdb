@@ -5,6 +5,11 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 
 class NavScrollExample extends React.Component {
+    _handleKeyDown(e){
+        if(e.key === "Enter"){
+            this.props.handleChange(e);
+        }
+    }
     render() {
         return (
             <div>
@@ -27,6 +32,7 @@ class NavScrollExample extends React.Component {
                                     className="me-2"
                                     aria-label="Search"
                                     onChange={(e) => this.props.handleChange(e)}
+                                    onKeyDown={this._handleKeyDown}
                                 />
                             </Form>
                         </Navbar.Collapse>
