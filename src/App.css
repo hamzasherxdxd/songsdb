@@ -78,3 +78,15 @@ ul {
 .card-btn {
   float: right;
 }
+
+      .no-underline{
+      text-decoration: none;
+      color: inherit;
+ }
+
+.shadow {
+  position: fixed;
+  width: 100%;
+  background-color: white;
+  bottom: 0;
+}

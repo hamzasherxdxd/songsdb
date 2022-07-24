@@ -3,6 +3,7 @@ import './App.css';
 import NavScrollExample from './components/nav';
 import ResultAlbum from './components/ResultAlbum';
 import ResultSongs from './components/ResultSongs';
+import Footer from './components/Footer';
 
 export default class App extends React.Component {
     constructor(props) {
@@ -42,6 +43,7 @@ export default class App extends React.Component {
                     id={this.state.id}
                     showModal={this.state.showModal}
                 />
+                <Footer className="bot"/>
             </div>
         );
     }

@@ -9,6 +9,7 @@
     "axios": "^0.27.2",
     "bloodhound-js": "^1.2.3",
     "bootstrap": "^5.1.3",
+    "cdbreact": "^1.5.3",
     "jquery": "^3.6.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.4.0",
