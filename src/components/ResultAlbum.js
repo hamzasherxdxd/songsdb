@@ -3,6 +3,7 @@ import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import LinesEllipsis from 'react-lines-ellipsis';
 import Row from 'react-bootstrap/Row';
+import Button from 'react-bootstrap/Button'
 
 export default class ResultAlbum extends React.Component {
     constructor(props) {
@@ -106,7 +107,7 @@ export default class ResultAlbum extends React.Component {
                         this.state.album.map((item, i) => {
                             return (
                                 <Col>
-                                    <p>{this.state.id[i]}</p>
+                                <br />
                                     <Card>
                                         <Card.Img
                                             variant="top"
@@ -130,15 +131,17 @@ export default class ResultAlbum extends React.Component {
                                             <Card.Title>
                                                 {this.state.genre[i]}
                                             </Card.Title>
-                                            <button
+                                            <Button
                                                 onClick={(event) =>
                                                     this.handleAlbumClickOpen(
                                                         this.state.id[i]
                                                     )
                                                 }
+                                                variant="primary"
+                                                className="card-btn"
                                             >
-                                                Click
-                                            </button>
+                                                View Details...
+                                            </Button>
                                             {/* <Modal
                                                 isOpen={this.state.showModal}
                                                 contentLabel="Songs"

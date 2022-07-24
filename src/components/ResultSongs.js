@@ -1,5 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
+import Card from 'react-bootstrap/Card';
+import ReactModal from 'react-modal';
 
 export default class ResultSongs extends React.Component {
     constructor(props) {
@@ -14,6 +16,27 @@ export default class ResultSongs extends React.Component {
             showModal: this.props.showModal,
         };
         this.handleAlbumClickClose = this.handleAlbumClickClose.bind(this);
+    }
+
+    getDuration(duration) {
+        var minutes = Math.floor(duration / 60000);
+        var seconds = ((duration % 60000) / 1000).toFixed(0);
+        return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+        // var sec_num = parseInt(duration, 10); // don't forget the second param
+        // var hours = Math.floor(sec_num / 3600);
+        // var minutes = Math.floor((sec_num - hours * 3600) / 60);
+        // var seconds = sec_num - hours * 3600 - minutes * 60;
+
+        // if (hours < 10) {
+        //     hours = '0' + hours;
+        // }
+        // if (minutes < 10) {
+        //     minutes = '0' + minutes;
+        // }
+        // if (seconds < 10) {
+        //     seconds = '0' + seconds;
+        // }
+        // return hours + ':' + minutes + ':' + seconds;
     }
 
     fetchApiSongs(url) {
@@ -57,26 +80,8 @@ export default class ResultSongs extends React.Component {
             });
     }
 
-    componentDidMount() {
-        //     console.log(this.state.albumId);
-        //     console.log(this.state.albumName);
-        //     if (
-        //         // this.props.id === this.state.albumId &&
-        //         this.state.albumName === ''
-        //     ) {
-        //         this.showResults();
-        //     }
-        // }
-        // showResults() {
-        //     this.fetchApiSongs(
-        //         `https://theaudiodb.p.rapidapi.com/track.php?m=${this.props.id}`
-        //     );
-    }
-
     componentDidUpdate(prevProps, prevState) {
-        console.log('ASDF');
         if (prevProps.id !== this.props.id) {
-            console.log('asd');
             this.fetchApiSongs(
                 `https://theaudiodb.p.rapidapi.com/track.php?m=${this.props.id}`
             );
@@ -91,25 +96,11 @@ export default class ResultSongs extends React.Component {
             console.log(this.state.track);
         }
     }
-    // handleAlbumClickOpen() {
-    //     this.fetchApiSongs(
-    //         `https://theaudiodb.p.rapidapi.com/track.php?m=${this.state.albumId}`
-    //     )
-    //     this.setState({ showModal: true })
-    // }
-
     handleAlbumClickClose() {
-        this.setState({ showModal: false });
+        this.setState({ id: '', showModal: false });
     }
     render() {
         return (
-            // <ReactModal
-            //     isOpen={this.state.showModal}
-            //     contentLabel="Result Songs"
-            //     className="Modal"
-            //     overlayClassName="Overlay"
-            //     onRequestClose={this.handleAlbumClickClose}
-            // ></ReactModal>
             <div>
                 <Modal
                     isOpen={this.state.showModal}
@@ -119,14 +110,33 @@ export default class ResultSongs extends React.Component {
                     ariaHideApp={false}
                     onRequestClose={this.handleAlbumClickClose}
                 >
-                    <ul>
-                        {this.state.track &&
-                            this.state.track.map((item, i) => {
-                                return <li key={i}>{item}</li>;
-                            })}
-                    </ul>
+                    {this.state.track &&
+                        this.state.track.map((item, i) => {
+                            return (
+                                <Card>
+                                    <Card.Header><strong>Title: </strong>{item}</Card.Header>
+                                    <Card.Body>
+                                        <blockqoute className="blockqoute mb-0">
+                                            <p><strong>Artist Name: </strong>{this.state.artistName}</p>
+                                        </blockqoute>
+
+                                        <blockqoute className="blockqoute mb-0">
+                                            <p><strong>Genre: </strong>{this.state.genre[i]}</p>
+                                        </blockqoute>
+                                        <blockqoute className="blockqoute mb-0">
+                                            <p><strong>Duration: </strong>
+                                                {this.getDuration(
+                                                    this.state.duration[i]
+                                                )}
+                                            </p>
+                                        </blockqoute>
+                                    </Card.Body>
+                                </Card>
+                            ); // return <li key={i}>{item}</li>;
+                        })}
                 </Modal>
             </div>
         );
     }
 }
+ReactModal.defaultStyles = {} // Flushes all of react-modal's styles
